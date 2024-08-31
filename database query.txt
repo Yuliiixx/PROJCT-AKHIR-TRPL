@@ -1,0 +1,53 @@
+CREATE DATABASE db_resep_masakan;
+
+CREATE TABLE resep (
+    id_resep INT AUTO_INCREMENT PRIMARY KEY,
+    judul VARCHAR(255) NOT NULL,
+    deskripsi TEXT,
+    cara_memasak TEXT NOT NULL,
+    kategori VARCHAR(100),
+    gambar VARCHAR(255),
+    waktu_masak INT,
+    porsi INT,
+    tingkat_kesulitan ENUM('Mudah', 'Sedang', 'Sulit')
+);
+CREATE TABLE bahan (
+    id_bahan INT AUTO_INCREMENT PRIMARY KEY,
+    nama_bahan VARCHAR(255) NOT NULL,
+    sinonim_bahan VARCHAR(255),
+    kategori_bahan VARCHAR(100)
+);
+CREATE TABLE resep_bahan (
+    id_resep INT,
+    id_bahan INT,
+    jumlah VARCHAR(50),
+    PRIMARY KEY (id_resep, id_bahan),
+    FOREIGN KEY (id_resep) REFERENCES resep(id_resep) ON DELETE CASCADE,
+    FOREIGN KEY (id_bahan) REFERENCES bahan(id_bahan) ON DELETE CASCADE
+);
+CREATE TABLE user (
+    id_user INT AUTO_INCREMENT PRIMARY KEY,
+    nama_user VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    kata_sandi VARCHAR(255) NOT NULL
+);
+CREATE TABLE user_resep (
+    id_user INT,
+    id_resep INT,
+    tanggal_simpan DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_user, id_resep),
+    FOREIGN KEY (id_user) REFERENCES user(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_resep) REFERENCES resep(id_resep) ON DELETE CASCADE
+);
+CREATE TABLE kategori_resep (
+    id_kategori INT AUTO_INCREMENT PRIMARY KEY,
+    nama_kategori VARCHAR(100) NOT NULL
+);
+CREATE TABLE kategori_resep_resep (
+    id_kategori INT,
+    id_resep INT,
+    PRIMARY KEY (id_kategori, id_resep),
+    FOREIGN KEY (id_kategori) REFERENCES kategori_resep(id_kategori) ON DELETE CASCADE,
+    FOREIGN KEY (id_resep) REFERENCES resep(id_resep) ON DELETE CASCADE
+);
+
